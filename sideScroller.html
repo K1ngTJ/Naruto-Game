@@ -1,0 +1,196 @@
+<html>
+  <head>
+      <script src="p5.min.js"></script>
+      <script src="p5.collide2d.min.js"></script>
+
+ <style>
+  body{
+  overflow:hidden;
+  margin:0;
+  padding:0;
+  }
+  </style>
+  </head>
+  <body>
+    
+    <script>
+var w = window.innerWidth;
+var h = window.innerHeight;
+var jumper = new jumper();
+var barrier = new barrier();
+var barrier2 = new barrier2();
+var hit = false;
+var hit2 = false;
+var balll = 50;
+var counterr = 0;
+var rand1 = Math.floor(Math.random()*200);
+var rand2 = Math.floor(Math.random()*200)+200;
+let img;
+let img2;
+let img3;
+      
+      function setup(){
+        createCanvas(w,h);
+        img = loadImage('village.jpg')
+        img2 = loadImage('kakashi.png')
+        img3 = loadImage('running.png')
+        img4 = loadImage('kakashi.png')
+
+
+      }
+      function draw() {
+      background(img);
+      jumper.show();
+      jumper.update();
+      barrier.show();
+      barrier.update();
+      barrier.kill();
+      barrier2.show();
+      barrier2.update();
+      barrier2.kill();
+      hit = collideRectRect(barrier.x,rand1,50,50,jumper.x,jumper.y,50,50);
+      hit2 = collideRectRect(barrier2.x,rand2,50,50,jumper.x,jumper.y,50,50);
+      print("colliding? " + hit);
+      textSize(30);
+      fill(color("white"));
+      text("Score: " + counterr,25, 30);
+      }
+
+      function jumper() {
+        this.x = 50;
+        this.y = 0;
+        this.gravity = 0.5; //Force of gravity
+        this.lift = -8;
+        this.velocity = 0;
+        
+        
+        this.show = function(){
+          image(img3,this.x,this.y,50,50  )
+        }
+        
+        this.up = function(){
+          this.velocity += this.lift;
+          
+        }
+        this.update = function() {
+          this.velocity += this.gravity;
+          this.y += this.velocity;
+          this.velocity *= 0.8;
+          if(this.y > h){
+            this.y = h -50  ;
+            this.velocity = 0;
+            
+          }
+          if(this.y < 0) {
+            this.y = 0;
+            this.velocity = 0;
+          }
+          
+        }
+      }
+      
+      function keyPressed() {
+        if(keyCode == 32){
+          jumper.up();
+        }
+      
+        
+        if(keyCode == 82){
+          document.location.reload(true)
+    
+        }
+        if(keyCode == 66){
+          window.location.replace("index.html");
+
+        }
+      }
+      
+           function barrier() {
+        this.x = w;
+        this.y = rand1;
+        this.gravity = 0.2; //Force of gravity
+        this.velocity = 0;
+         
+        this.show = function() {
+          image(img2 ,this.x,rand1,50,50  )
+
+        }
+        
+       
+        this.update = function()  {
+          this.velocity += this.gravity;
+          this.x -= this.velocity;
+        
+          if(this.x < 0){
+          counterr += 1;
+          this.x= w;
+          this.velocity = 0;
+              textSize(30);
+          fill(color("white"));
+          text("Score: " + counterr,25, 30);
+          rand1 =  Math.floor(Math.random()*500)+155;
+
+      
+      
+  
+          }
+          if(counterr === 5){
+            textSize(200);
+          fill(color("white"));
+          text("YOU WIN",25, 500, );
+            noLoop();
+          }
+          
+        }
+  this.kill = function() {
+    if(hit === true){
+    noLoop()
+    textSize(85);
+    fill(color("white"));
+    text("GAME OVER HIT 'R' TO RESTART",15, 500);
+    
+
+      }
+      }
+ }
+      function barrier2() {
+     this.x = w;
+     this.y = rand2;
+     this.gravity = 0.2; //Force of gravity
+     this.velocity = 0;
+        
+      this.show = function() {
+        image(img4 ,this.x,rand2,50,50  )
+
+        }
+      this.update = function()  {
+        this.velocity += this.gravity;
+        this.x -= this.velocity;
+    if(this.x < 0){
+      this.x= w;
+      this.y = Math.floor(Math.random()*500);;
+      this.velocity = 0;
+      textSize(30);
+      fill(color("white"));
+      text("Score: " + counterr,25, 30);
+      rand2 =  Math.floor(Math.random()*500)+155;
+        }
+      if(counterr === 5){
+        textSize(200);
+        fill(color("white"));
+        text("YOU WIN",25, 500, );
+        noLoop();
+        }
+        }
+    this.kill = function() {
+      if(hit2 === true){
+      noLoop();
+      textSize(85);
+      fill(color("white"));
+      text("GAME OVER HIT 'R' TO RESTART",15, 500);
+      }
+      }
+ }
+    </script>
+  </body>
+</html>
